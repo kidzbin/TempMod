@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <wiringPi.h>
+#include <time.h>
 #include "DS1820/DS1820.h"
 #include "AM2302/AM2302.h"
 
@@ -9,9 +10,11 @@
 
 int main(void)
 {
+	_AM2302Data AM2302Data;
 	uint16_t DSTemp;
- 	_AM2302Data AM2302Data;
  	uint8_t  TempStatus;
+ 	time_t now;
+ 	struct tm *local;
 
 	InitDS1820(DS_PIN);
 	InitAM2302(AM_PIN);
@@ -21,6 +24,8 @@ int main(void)
 
 	do
 	{
+		time(&now);
+		local = localtime(&now);
 		TempStatus = 0x00;
 		if(FetchDS(&DSTemp))
 			TempStatus |= 0x01;
@@ -30,7 +35,7 @@ int main(void)
 
 		if(TempStatus == 0x03)
 		{
-			printf("DS1820 Temp = %.2fC , AM2302 Room=%.2fC,Humi=%.2f%c \n" ,(float)DSTemp*0.0625 , (float)AM2302Data.Room/10 ,(float)AM2302Data.Humidity/10,37 );
+			printf("DS1820 Temp = %.2fC , AM2302 Room=%.2fC,Humi=%.2f%c  %2d:%2d:%2d\n" ,(float)DSTemp*0.0625 , (float)AM2302Data.Room/10 ,(float)AM2302Data.Humidity/10,37,local->tm_hour,local->tm_min,local->tm_sec );
 			delay(1000);
 		}
 		else

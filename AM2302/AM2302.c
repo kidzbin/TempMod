@@ -111,7 +111,8 @@ uint8_t FetchAM2303(_AM2302Data * AM2302Data)
 	AM2302Data->Humidity =  (uint16_t)(Data[0]<<8 | Data[1]);
 	AM2302Data->Room     =  (uint16_t)(Data[2]<<8 | Data[3]);
 
-  if(AM2302Data->Humidity>999) return 0;
+  if(AM2302Data->Humidity >999     ) return 0;
+  if(AM2302Data->Room     >850     ) return 0;
 
   	return 1;
 }
