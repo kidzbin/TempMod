@@ -27,6 +27,7 @@ int main(void)
  	int rc;
  	char *errMsg = NULL;
  	char InsertSQL[128];
+ 	char LCDStr[12];
 
  	rc = sqlite3_open("HomeTemp.db", &db);
  	
@@ -39,8 +40,11 @@ int main(void)
 	InitDS1820(DS_PIN);
 	InitAM2302(AM_PIN);
 
+	LCDInit();
+
   	if(wiringPiSetup() == -1)
     	return -1;
+
 	do
 	{
 		time(&now);
@@ -58,12 +62,30 @@ int main(void)
 			printf("DS1820 Temp = %.2fC , AM2302 Room=%.2fC,Humi=%.2f%c  %2d:%2d:%2d\n" ,(float)DSTemp*0.0625 , (float)AM2302Data.Room/10 ,(float)AM2302Data.Humidity/10,37,local->tm_hour,local->tm_min,local->tm_sec );
 			sprintf(InsertSQL,"INSERT INTO Home (DS_Temp,AM_Humi,AM_Room) VALUES(%.2f,%.1f,%.1f);" , (float)DSTemp*0.0625,(float)AM2302Data.Humidity/10,(float)AM2302Data.Room/10);
 			//printf("%s\n",InsertSQL);
+			LCDClear();
+      		
+      		gotoXY(0,0);
+      		sprintf(LCDStr,"%02d:%02d:%02d ",local->tm_hour,local->tm_min,local->tm_sec);
+      		LcdString(LCDStr);
+      		
+      		gotoXY(0,1);
+      		sprintf(LCDStr,"DS:%.2f  ",(float)DSTemp*0.0625);
+      		LcdString(LCDStr);
+
+      		gotoXY(0,2);
+      		sprintf(LCDStr,"RT:%.2f  ",(float)AM2302Data.Room/10);
+      		LcdString(LCDStr);      		
+
+      		gotoXY(0,3);
+      		sprintf(LCDStr,"H :%.2f%c  ",(float)AM2302Data.Humidity/10,0x25);
+      		LcdString(LCDStr);  
+
 			rc = sqlite3_exec(db, InsertSQL, 0, 0, &errMsg);
-			delay(3000);
+			delay(10000);
 		}
 		else
 		{
-			delay(750);
+			delay(1500);
 		}
 	}while(1);
 
