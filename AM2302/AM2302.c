@@ -3,7 +3,7 @@
 #include <wiringPi.h>
 #include "AM2302.h"
 
-#define  PIN    1
+#define  PIN    0
 
 #if 0
 int main(void)
