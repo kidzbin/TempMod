@@ -4,7 +4,7 @@
 #define CMD    0
 #define DATA   1
 
-int LCDInit(void);
+int LCDInit(uint8_t CLK,uint8_t DIN,uint8_t DC,uint8_t CE,uint8_t RST);
 
 void LCDSample(void);
 void SendLCD(uint8_t bMode,uint8_t bData);

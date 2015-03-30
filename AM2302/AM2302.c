@@ -123,7 +123,7 @@ uint8_t FetchAM2303(_AM2302Data * AM2302Data)
   digitalWrite(bReadPin_AM, HIGH);
   delayMicroseconds(100);
   digitalWrite(bReadPin_AM, LOW);
-  delayMicroseconds(500);
+  delayMicroseconds(400);
   digitalWrite(bReadPin_AM, HIGH);
   delayMicroseconds(40);
   pinMode(bReadPin_AM, INPUT);
@@ -138,6 +138,9 @@ uint8_t FetchAM2303(_AM2302Data * AM2302Data)
     if(rawus[i]>max) max = rawus[i] ;
     if(rawus[i]<min) min = rawus[i] ;     
   }
+
+  pinMode(bReadPin_AM, OUTPUT);
+  digitalWrite(bReadPin_AM, HIGH);
 
   mid = ( max + min ) / 2;
 

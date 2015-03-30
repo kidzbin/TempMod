@@ -37,20 +37,20 @@ float GetThermalCouple(void)
   return wTemp;
 }
 
-int main()
-{
-	float wTemp;
+// int main()
+// {
+// 	float wTemp;
 
-	if(wiringPiSetup() == -1)
-	    return -1;
+// 	if(wiringPiSetup() == -1)
+// 	    return -1;
 
-	InitMax6675(0,1,100000);
+// 	InitMax6675(0,1,100000);
 
-	while(1)
-	{
-		printf("%.2f\n",GetThermalCouple());
-		delay(1000);
-	}
+// 	while(1)
+// 	{
+// 		printf("%.2f\n",GetThermalCouple());
+// 		delay(1000);
+// 	}
 
-	return 0;
-}
+// 	return 0;
+// }
